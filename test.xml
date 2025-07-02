@@ -1,0 +1,181 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.example</groupId>
+    <artifactId>spring-crud-film</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <packaging>war</packaging>
+
+    <properties>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
+        <spring.version>6.1.6</spring.version>
+        <hibernate.version>6.5.2.Final</hibernate.version>
+        <spring-data-jpa.version>3.2.5</spring-data-jpa.version>
+        <mysql-connector.version>8.3.0</mysql-connector.version>
+        <hikaricp.version>5.1.0</hikaricp.version>
+        <jakarta.servlet.version>6.0.0</jakarta.servlet.version>
+        <jakarta.jsp.version>3.0.0</jakarta.jsp.version>
+        <jakarta.jstl.version>2.0.0</jakarta.jstl.version>
+        <slf4j.version>2.0.9</slf4j.version>
+        <logback.version>1.4.11</logback.version>
+        <!-- Chemin vers le dossier librairie -->
+        <lib.dir>${project.basedir}/librairie</lib.dir>
+    </properties>
+
+    <dependencies>
+        <!-- Spring Web MVC -->
+        <!-- JAR: spring-webmvc-6.1.6.jar -->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-webmvc</artifactId>
+            <version>${spring.version}</version>
+            <scope>system</scope>
+            <systemPath>${lib.dir}/spring-webmvc-${spring.version}.jar</systemPath>
+        </dependency>
+
+        <!-- Spring Data JPA -->
+        <!-- JAR: spring-data-jpa-3.2.5.jar -->
+        <dependency>
+            <groupId>org.springframework.data</groupId>
+            <artifactId>spring-data-jpa</artifactId>
+            <version>${spring-data-jpa.version}</version>
+            <scope>system</scope>
+            <systemPath>${lib.dir}/spring-data-jpa-${spring-data-jpa.version}.jar</systemPath>
+        </dependency>
+
+        <!-- Spring ORM -->
+        <!-- JAR: spring-orm-6.1.6.jar -->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-orm</artifactId>
+            <version>${spring.version}</version>
+            <scope>system</scope>
+            <systemPath>${lib.dir}/spring-orm-${spring.version}.jar</systemPath>
+        </dependency>
+
+        <!-- Hibernate -->
+        <!-- JAR: hibernate-core-6.5.2.Final.jar -->
+        <dependency>
+            <groupId>org.hibernate.orm</groupId>
+            <artifactId>hibernate-core</artifactId>
+            <version>${hibernate.version}</version>
+            <scope>system</scope>
+            <systemPath>${lib.dir}/hibernate-core-${hibernate.version}.jar</systemPath>
+        </dependency>
+
+        <!-- MySQL Connector -->
+        <!-- JAR: mysql-connector-j-8.3.0.jar -->
+        <dependency>
+            <groupId>com.mysql</groupId>
+            <artifactId>mysql-connector-j</artifactId>
+            <version>${mysql-connector.version}</version>
+            <scope>system</scope>
+            <systemPath>${lib.dir}/mysql-connector-j-${mysql-connector.version}.jar</systemPath>
+        </dependency>
+
+        <!-- HikariCP -->
+        <!-- JAR: HikariCP-5.1.0.jar -->
+        <dependency>
+            <groupId>com.zaxxer</groupId>
+            <artifactId>HikariCP</artifactId>
+            <version>${hikaricp.version}</version>
+            <scope>system</scope>
+            <systemPath>${lib.dir}/HikariCP-${hikaricp.version}.jar</systemPath>
+        </dependency>
+
+        <!-- Jakarta Servlet API -->
+        <!-- JAR: jakarta.servlet-api-6.0.0.jar -->
+        <dependency>
+            <groupId>jakarta.servlet</groupId>
+            <artifactId>jakarta.servlet-api</artifactId>
+            <version>${jakarta.servlet.version}</version>
+            <scope>system</scope>
+            <systemPath>${lib.dir}/jakarta.servlet-api-${jakarta.servlet.version}.jar</systemPath>
+        </dependency>
+
+        <!-- Jakarta JSP API -->
+        <!-- JAR: jakarta.servlet.jsp-api-3.0.0.jar -->
+        <dependency>
+            <groupId>jakarta.servlet.jsp</groupId>
+            <artifactId>jakarta.servlet.jsp-api</artifactId>
+            <version>${jakarta.jsp.version}</version>
+            <scope>system</scope>
+            <systemPath>${lib.dir}/jakarta.servlet.jsp-api-${jakarta.jsp.version}.jar</systemPath>
+        </dependency>
+
+        <!-- Jakarta JSTL API -->
+        <!-- JAR: jakarta.servlet.jsp.jstl-api-2.0.0.jar -->
+        <dependency>
+            <groupId>jakarta.servlet.jsp.jstl</groupId>
+            <artifactId>jakarta.servlet.jsp.jstl-api</artifactId>
+            <version>${jakarta.jstl.version}</version>
+            <scope>system</scope>
+            <systemPath>${lib.dir}/jakarta.servlet.jsp.jstl-api-${jakarta.jstl.version}.jar</systemPath>
+        </dependency>
+
+        <!-- Jakarta JSTL Implementation -->
+        <!-- JAR: jakarta.servlet.jsp.jstl-2.0.0.jar -->
+        <dependency>
+            <groupId>org.glassfish.web</groupId>
+            <artifactId>jakarta.servlet.jsp.jstl</artifactId>
+            <version>${jakarta.jstl.version}</version>
+            <scope>system</scope>
+            <systemPath>${lib.dir}/jakarta.servlet.jsp.jstl-${jakarta.jstl.version}.jar</systemPath>
+        </dependency>
+
+        <!-- SLF4J -->
+        <!-- JAR: slf4j-api-2.0.9.jar -->
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>${slf4j.version}</version>
+            <scope>system</scope>
+            <systemPath>${lib.dir}/slf4j-api-${slf4j.version}.jar</systemPath>
+        </dependency>
+
+        <!-- Logback -->
+        <!-- JAR: logback-classic-1.4.11.jar et logback-core-1.4.11.jar -->
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+            <version>${logback.version}</version>
+            <scope>system</scope>
+            <systemPath>${lib.dir}/logback-classic-${logback.version}.jar</systemPath>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <finalName>spring-crud-film</finalName>
+        <plugins>
+            <!-- Maven WAR Plugin -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-war-plugin</artifactId>
+                <version>3.4.0</version>
+                <configuration>
+                    <warSourceDirectory>src/main/webapp</warSourceDirectory>
+                    <failOnMissingWebXml>false</failOnMissingWebXml>
+                    <!-- Inclure les dépendances system dans le WAR -->
+                    <packagingIncludes>WEB-INF/lib/*.jar</packagingIncludes>
+                </configuration>
+            </plugin>
+
+            <!-- Maven Compiler Plugin -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.11.0</version>
+                <configuration>
+                    <source>${maven.compiler.source}</source>
+                    <target>${maven.compiler.target}</target>
+                    <compilerArgs>
+                        <arg>-parameters</arg>
+                    </compilerArgs>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>
