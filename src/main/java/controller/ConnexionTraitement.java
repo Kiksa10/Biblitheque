@@ -11,6 +11,6 @@ public class ConnexionTraitement {
     @PostMapping("/login")
     public String traitement_Login(){
 
-        return "dashboard";
+        return "redirect:/adminHome";
     }
 }
