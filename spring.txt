@@ -1,0 +1,161 @@
+Quoi:
+On demande de Cree une application pour une gestion de prêt a domicile ou 
+sur place d’exemplaires de livre dans une bibliothèque par des adherents en tenant en compte
+
+- La validité ou abonnement des adherents
+- Durée des prêts
+- Pénalisations des adherents
+- Reservation de prêt
+- Jour férié
+
+Modèle de Données:
+
+Entités Principales
+
+1. Livre
+    - ID unique
+    - Titre
+    - Auteur(s)
+    - Éditeur [X]
+    - Date de publication
+    - Catégorie/Genre
+    - Description
+    - Couverture  [X]
+2. Exemplaire
+    - ID unique
+    - Référence livre (ID)
+    - Statut (disponible, prêté, réservé, en réparation) [X]
+    - Localisation (rayon, étagère)
+    - Date d'acquisition
+    - Prix
+3. Adhérent
+    - ID unique
+    - Nom
+    - Prénom
+    - Email
+    - Téléphone
+    - Adresse
+    - Date d'inscription
+    - Date de fin d'abonnement
+    - Type (Étudiant/Personnel/Professeur/Anonyme) [X]
+    - Statut Adhérant (actif/suspendu) [X]
+    - Historique des prêts [X]
+4. Prêt
+    - ID unique
+    - Référence exemplaire(ID)
+    - Référence adhérent(ID)
+    - Date de début
+    - Date de fin prévue
+    - Date de retour effective
+    - Type (domicile/sur place) [X]
+    - Statut Pres (en cours, retourné, en retard) [X]
+5. Réservation
+    - ID unique
+    - Référence livre(ID)
+    - Référence adhérent(ID)
+    - Date de demande
+    - Date d'expiration
+    - Statut Reservation (en attente, annulée, honorée) [X]
+6. Pénalité
+    - ID unique
+    - Référence prêt (ID)
+    - Montant
+    - Date d'émission
+    - Date de paiement
+    - Statut Pénalité  (impayée, payée) [X]
+7. Jour Férié
+    - Date
+    - Description
+
+Comment:
+Fonctionnalités Implémentées
+
+1. Gestion des Livres et Exemplaires
+
+- Recherche de livres par titre, auteur, ISBN, catégorie
+- État des exemplaires avec disponibilité en temps réel
+- Historique des prêts par exemplaire
+- Filtrage des exemplaires les plus empruntés
+
+2. Gestion des Adhérents
+
+- Inscription/Renouvellement
+- Profil adhérent
+- Classification
+- Détection des meilleurs clients (statistiques de prêts)
+
+3. Gestion des Prêts
+
+- Emprunt avec vérification automatique:
+    - Validité de l'abonnement
+    - Quotas de prêts (nombre et durée selon type d'adhérent)
+    - Pénalités impayées
+- Retour avec calcul automatique des pénalités si retard
+- Prolongement de prêt (si autorisé)
+- Prêt sur place (marquage spécial)
+
+4. Système de Réservation
+
+- File d'attente automatique pour les livres indisponibles
+- Notification par email lors de la disponibilité
+- Délai limité pour venir chercher le livre réservé
+
+5. Gestion des Pénalités
+
+- Calcul automatique des retards (hors jours fériés)
+- Application des règles spécifiques par type d'adhérent
+- Historique des pénalités
+- Interface de paiement
+
+6. Fonctionnalités Avancées
+
+- Recommandations de livres basées sur:
+    - Historique de prêts
+    - Catégories préférées
+    - Emprunts similaires d'autres utilisateurs
+- Alertes automatiques:
+    - Retour imminent
+    - Retard constaté
+    - Abonnement à renouveler
+- Reporting:
+    - Statistiques d'emprunt
+    - Taux de rotation des livres
+    - Adhérents actifs/inactifs
+
+Règles de Gestion:
+
+1. Limites de prêt:
+    - Étudiants: 5 livres pour 3 semaines
+    - Professeurs: 10 livres pour 6 semaines
+    - Personnel: 3 livres pour 2 semaines
+    - Anonyme: 1 livre pour 1 semaine
+2. Validité d'abonnement:
+    - Aucune opération possible si abonnement expiré
+    - Période de grâce de 7 jours après expiration
+3. Pénalités:
+    - 5000Ar/jour de retard pour prêt à domicile
+    - Suspension après 3 retards ou 7000Ar de pénalités impayées
+4. Prolongements:
+    - Maximum 2 prolongements par prêt
+    - Pas de prolongement si réservation en attente
+5. Jours fériés:
+    - Non comptabilisés dans le calcul des retards
+    - Bibliothèque fermée, pas de retour possible
+
+Interface Utilisateur
+
+L'application proposera:
+
+- Une interface web responsive pour le personnel
+- Un portail adhérent avec compte personnel
+- Une interface administrateur complète
+- Des QR codes pour gestion rapide des exemplaires
+
+Sécurité
+
+- Authentification forte pour le personnel
+- Mot de passe + email pour les adhérents
+- Chiffrement des données personnelles
+- Journalisation des opérations sensibles
+
+

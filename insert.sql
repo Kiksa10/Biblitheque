@@ -78,14 +78,64 @@ INSERT INTO reservation (id_adherent, id_livre, date_reservation, date_expiratio
 
 INSERT INTO Adherent (nom, prenom, username, password, email, categorie)
 VALUES (
-    'Dupont', 
-    'Jean', 
-    'jdupont', 
+    'Rakoto', 
+    'Didier', 
+    'didier', 
     '12345', -- mot de passe: adherent123
-    'jeandupont@email.com', 
+    'didier@email.com', 
     'adulte'
 );
 
 -- Insertion d'un administrateur par défaut (mot de passe: admin123)
 INSERT INTO admin (nom, prenom, username, password, date_embauche, role)
 VALUES ('NIAINA', 'Francky', 'kiksa', '12345', CURDATE(), 'SUPER_ADMIN');
+
+
+
+
+-- Emprunt 1: En cours (normal)
+INSERT INTO Emprunt (id_adherent, id_exemplaire, date_emprunt, date_retour_prevue, statut)
+VALUES (8,3,'2023-11-01 10:00:00', '2024-01-01 10:00:00','en cours');
+
+-- Emprunt 2: En retard
+INSERT INTO Emprunt (id_adherent, id_exemplaire, date_emprunt, date_retour_prevue, statut)
+VALUES (
+    8, 
+    5, 
+    '2023-10-15 14:30:00', 
+    '2024-02-15 14:30:00',  -- Date de retour dépassée
+    'en cours'
+);
+
+-- Emprunt 3: Retourné à temps
+INSERT INTO Emprunt (id_adherent, id_exemplaire, date_emprunt, date_retour_prevue, date_retour_effectif, statut)
+VALUES (
+    8, 
+    8, 
+    '2023-11-05 11:20:00', 
+    DATE_ADD('2023-11-05 11:20:00', INTERVAL 30 DAY),
+    DATE_ADD('2023-11-05 11:20:00', INTERVAL 25 DAY),  -- Retourné 5 jours avant
+    'retourné'
+);
+
+-- Emprunt 4: Livre perdu
+INSERT INTO Emprunt (id_adherent, id_exemplaire, date_emprunt, date_retour_prevue, statut)
+VALUES (
+    8, 
+    3, 
+    '2023-09-10 16:45:00', 
+    DATE_ADD('2023-09-10 16:45:00', INTERVAL 30 DAY),
+    'perdu'
+);
+
+-- Emprunt 5: En cours (proche de la date de retour)
+INSERT INTO Emprunt (id_adherent, id_exemplaire, date_emprunt, date_retour_prevue, statut)
+VALUES (
+    8, 
+    7, 
+    DATE_SUB(NOW(), INTERVAL 25 DAY),  -- Emprunté il y a 25 jours
+    DATE_ADD(DATE_SUB(NOW(), INTERVAL 25 DAY), INTERVAL 30 DAY),  -- Retour dans 5 jours
+    'en cours'
+);
+
+

@@ -27,4 +27,16 @@ public class AuthService {
         Adherent user = adherentRepository.findByUsername(username).orElse(null);
         return user != null && user.getPassword().equals(password);
     }
+
+    public Admin getAdminByUsername(String username) {
+    return adminRepository.findByUsername(username)
+           .orElseThrow(() -> new RuntimeException("Admin non trouvé"));
+    }
+
+    public Adherent getAdherentByUsername(String username) {
+        return adherentRepository.findByUsername(username)
+            .orElseThrow(() -> new RuntimeException("Adhérent non trouvé"));
+    }
+
+  
 }

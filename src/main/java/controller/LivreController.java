@@ -14,9 +14,15 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import jakarta.servlet.http.HttpSession;
 // import model.Auteur;
 import model.Livre;
+import model.Adherent;
+import model.Emprunt;
+import service.AdherentService;
+import service.EmpruntService;
 // import service.AuteurService;
 import service.LivreService;
 
@@ -27,23 +33,29 @@ public class LivreController {
     private LivreService livreService;
 
     @Autowired
+    private AdherentService adherentService;
+
+    @Autowired
+    private EmpruntService empruntService;
+
+    @Autowired
     // private AuteurService auteurService;
 
     @GetMapping("/adminHome")
     public String redirectToAdminPage() {
         System.out.println("Redirection vers /livres");
-        return "redirect:/livresAdmin";
+        return "redirect:/adminPage";
     }
 
      @GetMapping("/adherentHome")
     public String redirectToAdherentPage() {
         System.out.println("Redirection vers /livres");
-        return "redirect:/livresAdherent";
+        return "redirect:/adherentPage";
     }
 
-    @GetMapping("/livresAdmin")
+    @GetMapping("/adminPage")
     @Transactional(readOnly = true)
-    public String listLivre(Model model, @RequestParam(value = "error", required = false) Boolean error) {
+    public String adminPage(Model model, @RequestParam(value = "error", required = false) Boolean error) {
         List<Livre> livre = livreService.getAllLivres();
         System.out.println("livres récupérés : " + livre);
         model.addAttribute("livres", livre);
@@ -55,21 +67,61 @@ public class LivreController {
         return "dashboardAdmin";
     }
 
-    @GetMapping("/livresAdherent")
-    @Transactional(readOnly = true)
-    public String listExemplaire(Model model, @RequestParam(value = "error", required = false) Boolean error) {
-        List<Livre> livre = livreService.getAllLivres();
-        System.out.println("livres récupérés : " + livre);
-        model.addAttribute("livres", livre);
 
-        if (Boolean.TRUE.equals(error)) {
-            model.addAttribute("errorMessage", "Une erreur s'est produite lors de l'ajout du livres.");
+    @GetMapping("/adherentPage")
+public String adherentPage(Model model, HttpSession session, RedirectAttributes redirectAttributes) {
+    try {
+        // 1. Vérification de la session
+        if (session.getAttribute("adherent") == null) {
+            redirectAttributes.addFlashAttribute("error", "Veuillez vous connecter");
+            return "redirect:/login";
         }
 
+        // 2. Récupération de l'adhérent
+        Adherent adherent = (Adherent) session.getAttribute("adherent");
+        if (adherent == null) {
+            session.invalidate();
+            redirectAttributes.addFlashAttribute("error", "Session invalide");
+            return "redirect:/login";
+        }
+
+        // 3. Rafraîchir les données depuis la base si nécessaire
+        adherent = adherentService.getAdherentById(adherent.getId());
+        if (adherent == null) {
+            session.invalidate();
+            redirectAttributes.addFlashAttribute("error", "Compte introuvable");
+            return "redirect:/login";
+        }
+
+        
+        // // 4. Préparer les données pour le dashboard
+        int nbPrets = adherentService.countPretsEnCours(adherent.getId());
+        int nbReservations = adherentService.countReservationsEnAttente(adherent.getId());
+        int nbRetards = adherentService.countRetards(adherent.getId());
+        String prochainRetour = adherentService.getProchainRetour(adherent.getId());
+        List<Emprunt> prets = empruntService.getEmpruntsEnCours(adherent.getId());
+        
+        // // 5. Ajouter les attributs au modèle
+        
+        model.addAttribute("nombrePretsEnCours", nbPrets);
+        model.addAttribute("nombreReservations", nbReservations);
+        model.addAttribute("prochainRetour", prochainRetour);
+        model.addAttribute("nombreRetards", nbRetards);
+        model.addAttribute("prets", prets);
+
         return "dashboardAdherent";
+
+    } catch (Exception e) {
+        session.invalidate();
+        redirectAttributes.addFlashAttribute("error", e.getMessage());
+        return "redirect:/login";
     }
+}
 
 
+
+  
+      
 
     @GetMapping("/new")
     public String showCreateForm(Model model) {

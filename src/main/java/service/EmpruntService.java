@@ -30,20 +30,20 @@ public class EmpruntService {
         return empruntRepository.findByAdherentId(adherentId);
     }
 
-    public List<Emprunt> getEmpruntsEnCours() {
-        return empruntRepository.findByStatut(Emprunt.StatutEmprunt.EN_COURS);
+    public List<Emprunt> getEmpruntsEnCours(Long adherentId) {
+        return empruntRepository.findByAdherentId(adherentId);
     }
 
-    public List<Emprunt> getEmpruntsEnRetard() {
-        return empruntRepository.findEmpruntsEnRetard();
-    }
+    // public List<Emprunt> getEmpruntsEnRetard() {
+    //     return empruntRepository.findEmpruntsEnRetard();
+    // }
 
-    public void retournerEmprunt(Long empruntId) {
-        Emprunt emprunt = getEmpruntById(empruntId);
-        if (emprunt != null) {
-            emprunt.setStatut(Emprunt.StatutEmprunt.RETOURNE);
-            emprunt.setDateRetourEffectif(new java.util.Date());
-            saveEmprunt(emprunt);
-        }
-    }
+    // public void retournerEmprunt(Long empruntId) {
+    //     Emprunt emprunt = getEmpruntById(empruntId);
+    //     if (emprunt != null) {
+    //         emprunt.setStatut(Emprunt.StatutEmprunt.RETOURNE);
+    //         emprunt.setDateRetourEffectif(new java.util.Date());
+    //         saveEmprunt(emprunt);
+    //     }
+    // }
 }

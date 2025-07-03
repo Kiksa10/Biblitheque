@@ -4,14 +4,24 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.SessionAttributes;
+
+import model.Adherent;
+
 import org.springframework.ui.Model;
 import service.AuthService;
+import service.AdherentService;
+
 
 @Controller
-public class ConnexionTraitement {
+@SessionAttributes("adherent")
+public class ConnexionTraitementController {
     
     @Autowired
     private AuthService authService;
+
+    @Autowired
+    private AdherentService adherentService;
     
     @PostMapping("/login")
     public String traitementLogin(
@@ -25,6 +35,8 @@ public class ConnexionTraitement {
         }
         // Vérification des credentials adherent
         else if (authService.validateAdherent(username, password)) {
+            Adherent adherent = adherentService.findByUsername(username);
+            model.addAttribute("adherent", adherent); // Stocké en session
             return "redirect:/adherentHome";
         }
         // Cas d'erreur

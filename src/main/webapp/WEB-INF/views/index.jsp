@@ -183,6 +183,7 @@
             </div>
             <h1>Connexion</h1>
             <p>Accédez à votre espace bibliothèque</p>
+            <p>${error}</p>
         </div>
 
         <form action="${pageContext.request.contextPath}/login" method="post">
