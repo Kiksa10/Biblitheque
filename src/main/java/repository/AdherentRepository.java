@@ -32,7 +32,7 @@ public interface AdherentRepository extends JpaRepository<Adherent, Long> {
     @Query("SELECT COUNT(e) FROM Emprunt e WHERE e.adherent.id = :adherentId AND e.dateRetourEffectif IS NULL")
     int countEmpruntsEnCours(Long adherentId);
     
-    @Query("SELECT COUNT(e) FROM Emprunt e WHERE e.adherent.id = :adherentId AND e.dateRetourEffectif IS NULL AND e.dateRetourPrevue < CURRENT_DATE")
+    @Query("SELECT COUNT(e) FROM Emprunt e WHERE e.adherent.id = :adherentId AND e.dateRetourEffectif >= e.dateRetourPrevue")
     int countEmpruntsEnRetard(Long adherentId);
     
     @Query("SELECT MIN(e.dateRetourPrevue) FROM Emprunt e WHERE e.adherent.id = :adherentId AND e.dateRetourEffectif IS NULL")

@@ -181,7 +181,7 @@
             <div class="login-icon">
                 <i class="fas fa-book-open"></i>
             </div>
-            <h1>Connexion</h1>
+            <h1>S'inscrire</h1>
             <p>Inscriver vous pour devenir membre</p>
         </div>
 

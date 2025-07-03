@@ -53,6 +53,12 @@ public class LivreController {
         return "redirect:/adherentPage";
     }
 
+    @GetMapping("/reservation")
+    public String redirectToReservationExemplaire() {
+        System.out.println("Redirection vers /reservation");
+        return "redirect:/reserv";
+    }
+
     @GetMapping("/adminPage")
     @Transactional(readOnly = true)
     public String adminPage(Model model, @RequestParam(value = "error", required = false) Boolean error) {
@@ -65,6 +71,20 @@ public class LivreController {
         }
 
         return "dashboardAdmin";
+    }
+
+    @GetMapping("/reserv")
+    @Transactional(readOnly = true)
+    public String reservationPage(Model model, @RequestParam(value = "error", required = false) Boolean error) {
+        List<Livre> livre = livreService.getAllLivres();
+        System.out.println("livres récupérés : " + livre);
+        model.addAttribute("livres", livre);
+
+        if (Boolean.TRUE.equals(error)) {
+            model.addAttribute("errorMessage", "Une erreur s'est produite lors de l'ajout du livres.");
+        }
+
+        return "reservationExemplaire";
     }
 
 
@@ -99,7 +119,7 @@ public String adherentPage(Model model, HttpSession session, RedirectAttributes 
         int nbReservations = adherentService.countReservationsEnAttente(adherent.getId());
         int nbRetards = adherentService.countRetards(adherent.getId());
         String prochainRetour = adherentService.getProchainRetour(adherent.getId());
-        List<Emprunt> prets = empruntService.getEmpruntsEnCours(adherent.getId());
+        List<Emprunt> prets = adherentService.getPretsEnCours(adherent.getId());
         
         // // 5. Ajouter les attributs au modèle
         
