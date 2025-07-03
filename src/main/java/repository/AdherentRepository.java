@@ -20,4 +20,6 @@ public interface AdherentRepository extends JpaRepository<Adherent, Long> {
     
     // Trouver les adhérents avec pénalité
     List<Adherent> findByPenaliteGreaterThan(Double montant);
+
+    Optional<Adherent> findByUsername(String username);
 }

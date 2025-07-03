@@ -74,3 +74,18 @@ INSERT INTO reservation (id_adherent, id_livre, date_reservation, date_expiratio
 (5, 4, '2021-04-10 11:30:00', '2021-04-17 11:30:00', 'honorée'),
 (1, 5, '2021-06-05 09:45:00', '2021-06-12 09:45:00', 'en attente'),
 (3, 1, '2021-03-15 14:00:00', '2021-03-22 14:00:00', 'expirée');
+
+
+INSERT INTO Adherent (nom, prenom, username, password, email, categorie)
+VALUES (
+    'Dupont', 
+    'Jean', 
+    'jdupont', 
+    '12345', -- mot de passe: adherent123
+    'jeandupont@email.com', 
+    'adulte'
+);
+
+-- Insertion d'un administrateur par défaut (mot de passe: admin123)
+INSERT INTO admin (nom, prenom, username, password, date_embauche, role)
+VALUES ('NIAINA', 'Francky', 'kiksa', '12345', CURDATE(), 'SUPER_ADMIN');

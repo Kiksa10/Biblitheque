@@ -46,6 +46,13 @@ public class Adherent {
     @OneToMany(mappedBy = "adherent")
     private Set<Reservation> reservations;
 
+    // Dans votre classe Adherent existante, ajoutez ces champs:
+    @Column(unique = true, nullable = false)
+    private String username;
+
+    @Column(nullable = false)
+    private String password;
+
     public Adherent() {}
 
     public Adherent(String nom, String prenom) {
@@ -55,7 +62,7 @@ public class Adherent {
 
     // Enum pour les catégories
     public enum CategorieAdherent {
-        ENFANT, ADULTE, SENIOR, ETUDIANT, PROFESSIONNEL
+        enfant, adulte, senior, etudiant, professionnel;
     }
 
     // Getters and Setters
@@ -87,4 +94,9 @@ public class Adherent {
     public void setEmprunts(Set<Emprunt> emprunts) { this.emprunts = emprunts; }
     public Set<Reservation> getReservations() { return reservations; }
     public void setReservations(Set<Reservation> reservations) { this.reservations = reservations; }
+        // Et les getters/setters correspondants
+    public String getUsername() { return username; }
+    public void setUsername(String username) { this.username = username; }
+    public String getPassword() { return password; }
+    public void setPassword(String password) { this.password = password; }
 }

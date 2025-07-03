@@ -1,16 +1,36 @@
 package controller;
 
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.ui.Model;
+import service.AuthService;
 
 @Controller
 public class ConnexionTraitement {
     
-
+    @Autowired
+    private AuthService authService;
+    
     @PostMapping("/login")
-    public String traitement_Login(){
+    public String traitementLogin(
+            @RequestParam String username,
+            @RequestParam String password,
+            Model model) {
 
-        return "redirect:/adminHome";
+        // Vérification des credentials admin
+        if (authService.validateAdmin(username, password)) {
+            return "redirect:/adminHome";
+        }
+        // Vérification des credentials adherent
+        else if (authService.validateAdherent(username, password)) {
+            return "redirect:/adherentHome";
+        }
+        // Cas d'erreur
+        else {
+            model.addAttribute("error", "Identifiant ou mot de passe incorrect");
+            return "index";
+        }
     }
 }

@@ -30,14 +30,20 @@ public class LivreController {
     // private AuteurService auteurService;
 
     @GetMapping("/adminHome")
-    public String redirectToList() {
+    public String redirectToAdminPage() {
         System.out.println("Redirection vers /livres");
-        return "redirect:/livres";
+        return "redirect:/livresAdmin";
     }
 
-    @GetMapping("/livres")
+     @GetMapping("/adherentHome")
+    public String redirectToAdherentPage() {
+        System.out.println("Redirection vers /livres");
+        return "redirect:/livresAdherent";
+    }
+
+    @GetMapping("/livresAdmin")
     @Transactional(readOnly = true)
-    public String listFilms(Model model, @RequestParam(value = "error", required = false) Boolean error) {
+    public String listLivre(Model model, @RequestParam(value = "error", required = false) Boolean error) {
         List<Livre> livre = livreService.getAllLivres();
         System.out.println("livres récupérés : " + livre);
         model.addAttribute("livres", livre);
@@ -46,7 +52,21 @@ public class LivreController {
             model.addAttribute("errorMessage", "Une erreur s'est produite lors de l'ajout du livres.");
         }
 
-        return "dashboard";
+        return "dashboardAdmin";
+    }
+
+    @GetMapping("/livresAdherent")
+    @Transactional(readOnly = true)
+    public String listExemplaire(Model model, @RequestParam(value = "error", required = false) Boolean error) {
+        List<Livre> livre = livreService.getAllLivres();
+        System.out.println("livres récupérés : " + livre);
+        model.addAttribute("livres", livre);
+
+        if (Boolean.TRUE.equals(error)) {
+            model.addAttribute("errorMessage", "Une erreur s'est produite lors de l'ajout du livres.");
+        }
+
+        return "dashboardAdherent";
     }
 
 

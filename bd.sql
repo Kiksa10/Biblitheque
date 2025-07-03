@@ -61,6 +61,10 @@ CREATE TABLE Adherent (
     actif BOOLEAN DEFAULT TRUE
 );
 
+ALTER TABLE Adherent 
+ADD COLUMN username VARCHAR(50) UNIQUE,
+ADD COLUMN password VARCHAR(255);
+
 -- Table Emprunt
 CREATE TABLE Emprunt (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -105,4 +109,23 @@ CREATE TABLE Livre_Auteur (
     FOREIGN KEY (id_auteur) REFERENCES Auteur(id) ON DELETE CASCADE
 );
 
-INSERT INTO Livre()
+CREATE TABLE admin (
+    id BIGINT PRIMARY KEY AUTO_INCREMENT,
+    nom VARCHAR(50) NOT NULL,
+    prenom VARCHAR(50) NOT NULL,
+    username VARCHAR(50) NOT NULL UNIQUE,
+    password VARCHAR(255) NOT NULL,
+    date_naissance DATE,
+    adresse VARCHAR(255),
+    telephone VARCHAR(20),
+    email VARCHAR(100) UNIQUE,
+    date_embauche DATE NOT NULL,
+    role ENUM('SUPER_ADMIN', 'BIBLIOTHECAIRE', 'GESTIONNAIRE') NOT NULL,
+    actif BOOLEAN DEFAULT TRUE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+-- Création d'un index sur le username pour des recherches plus rapides
+CREATE INDEX idx_admin_username ON admin(username);
+
