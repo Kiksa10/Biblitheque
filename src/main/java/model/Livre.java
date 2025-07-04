@@ -21,6 +21,7 @@ public class Livre {
 
     private String isbn;
 
+    @Column(name = "annee_publication ")
     private Integer anneePublication;
 
     private String editeur;
@@ -30,7 +31,7 @@ public class Livre {
     @Column(columnDefinition = "TEXT")
     private String resume;
 
-    @Column(name = "nbr_exemplaire")
+    @Column(name = "nbrExemplaire")
     private Integer nbrExemplaire = 1;
 
     @Temporal(TemporalType.DATE)

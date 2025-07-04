@@ -63,7 +63,7 @@ public class AdherentService {
 
     public int countReservationsEnAttente(Long adherentId) {
         // Implémentez cette méthode si vous avez une entité Reservation
-        return 0; // Temporaire
+        return adherentRepository.countReservationEnAttente(adherentId); // Temporaire
     }
 
     public String getProchainRetour(Long adherentId) {

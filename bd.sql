@@ -85,7 +85,7 @@ CREATE TABLE Reservation (
     id_livre INT NOT NULL,
     date_reservation DATETIME DEFAULT CURRENT_TIMESTAMP,
     date_expiration DATETIME,
-    statut ENUM('en attente', 'honorée', 'annulée', 'expirée') DEFAULT 'en attente',
+    statut ENUM('EN_ATTENTE', 'HONOREE', 'ANNULEE', 'EXPIREE') DEFAULT 'EN_ATTENTE',
     FOREIGN KEY (id_adherent) REFERENCES Adherent(id) ON DELETE CASCADE,
     FOREIGN KEY (id_livre) REFERENCES Livre(id) ON DELETE CASCADE
 );

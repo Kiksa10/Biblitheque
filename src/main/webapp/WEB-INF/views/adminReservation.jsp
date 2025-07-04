@@ -320,38 +320,55 @@
     <!-- Sidebar -->
     <div class="sidebar" id="sidebar">
         <div class="sidebar-header">
-            <h3><i class="fas fa-user-circle"></i> Mon Espace</h3>
+            <h3><i class="fas fa-book-open"></i> Bibliothèque</h3>
         </div>
         <nav class="sidebar-menu">
             <ul>
                 <li>
-                    <a href="${pageContext.request.contextPath}/adherentHome" class="active">
+                    <a href="${pageContext.request.contextPath}/admin/dashboard" class="active">
                         <i class="fas fa-tachometer-alt"></i> Tableau de bord
                     </a>
                 </li>
+                <li class="has-submenu">
+                    <a href="#">
+                        <i class="fas fa-book"></i> Gestion des livres
+                        <i class="fas fa-chevron-down ml-auto"></i>
+                    </a>
+                    <ul class="submenu">
+                        <li><a href="${pageContext.request.contextPath}/admin/livres"><i class="fas fa-list"></i> Liste des livres</a></li>
+                        <li><a href="${pageContext.request.contextPath}/admin/livres/new"><i class="fas fa-plus"></i> Ajouter un livre</a></li>
+                        <li><a href="${pageContext.request.contextPath}/admin/exemplaires"><i class="fas fa-copy"></i> Exemplaires</a></li>
+                    </ul>
+                </li>
                 <li>
-                    <a href="${pageContext.request.contextPath}/reservation">
-                        <i class="fas fa-book"></i> Catalogue des livres
+                    <a href="${pageContext.request.contextPath}/admin/membres">
+                        <i class="fas fa-users"></i> Gestion des membres
                     </a>
                 </li>
                 <li>
-                    <a href="${pageContext.request.contextPath}/adherent/mes-prets">
-                        <i class="fas fa-exchange-alt"></i> Mes prêts
+                    <a href="${pageContext.request.contextPath}/admin/reservations">
+                        <i class="fas fa-calendar-check"></i> Réservations
                     </a>
                 </li>
                 <li>
-                    <a href="${pageContext.request.contextPath}/adherent/mes-reservations">
-                        <i class="fas fa-calendar-check"></i> Mes réservations
+                    <a href="${pageContext.request.contextPath}/admin/pretsEnCours">
+                        <i class="fas fa-exchange-alt"></i> Prêts en cours
                     </a>
                 </li>
                 <li>
-                    <a href="${pageContext.request.contextPath}/adherent/abonnement">
-                        <i class="fas fa-id-card"></i> Mon abonnement
+                    <a href="${pageContext.request.contextPath}/admin/retards">
+                        <i class="fas fa-exclamation-triangle"></i> Retards
+                        <span class="badge" style="background: var(--danger-color); color: white;">3</span>
                     </a>
                 </li>
                 <li>
-                    <a href="${pageContext.request.contextPath}/adherent/historique">
-                        <i class="fas fa-history"></i> Mon historique
+                    <a href="${pageContext.request.contextPath}/admin/statistiques">
+                        <i class="fas fa-chart-bar"></i> Statistiques
+                    </a>
+                </li>
+                <li>
+                    <a href="${pageContext.request.contextPath}/admin/parametres">
+                        <i class="fas fa-cog"></i> Paramètres
                     </a>
                 </li>
                 <li>
@@ -367,13 +384,7 @@
     <div class="main-content">
         <div class="container">
             <header>
-                <h1><i class="fas fa-book-open"></i>Listes des Livres</h1>
-                <h1><c:if test="${error != null}">
-                     ${error}                              
-                    </c:if></h1>
-                    <c:if test="${succes != null}">
-                     ${success}                              
-                    </c:if></h1>
+                <h1><i class="fas fa-book-open"></i> Gestion des Reservations</h1>
                 
             </header>
 
@@ -382,43 +393,37 @@
                     <table>
                         <thead>
                             <tr>
+                                <th>Id</th>
                                 <th>Titre</th>
-                                <th>Auteur</th>
-                                <th>Genre</th>
-                                <th>Nbr Exemplaire Dispo</th>
+                                <th>Adherent</th>
+                                <th>Date reservation demander/th>
                                 <th>Statut</th>
                                 <th>Actions</th>
                             </tr>
                         </thead>
                         <tbody>
                             <c:choose>
-                                <c:when test="${not empty livres}">
-                                    <c:forEach items="${livres}" var="livre">
+                                <c:when test="${not empty reservations}">
+                                    <c:forEach items="${reservations}" var="reservation">
                                         <tr>
                                             <td>
-                                                <strong>${livre.titre}</strong><br>
-                                                <span class="text-muted">ISBN: ${livre.isbn}</span>
+                                                <strong>${reservation.id}</strong><br>
+                                                
                                             </td>
-                                            <td>${livre.auteur}</td>
-                                            <td>${livre.genre}</td>
-                                            <td>${livre.nbrExemplaire }</td>
+                                            <td>${reservation.livre.titre}</td>
+                                            <td>${reservation.adherent.username}</td>
+                                            <td>${reservation.dateReservation}</td>
                                             <td>
-                                            
-                                            <c:if test="${livre.nbrExemplaire > 0}">
                                                 <span class="badge status-published">Disponible</span>
-                                            </c:if>
-                                            <c:if test="${livre.nbrExemplaire < 0 || livre.nbrExemplaire == null}">
-                                                <span class="badge status-danger">Indisponible</span>
-                                            </c:if>
                                             </td>
                                             <td class="actions">
-                                                <form action="${pageContext.request.contextPath}/res/${livre.id}" method="get">
-                                                    <input type="date" name="dateReservation" id="dateReservation" required>
-                                                    <button type="submit" class="btn btn-success btn-sm">
-                                                        <i class="fas fa-edit"></i> Reserver
-                                                    </button>
-                                                </form>
-                                                
+                                                <a href="${pageContext.request.contextPath}/admin/livres/edit/${livre.id}" class="btn btn-success btn-sm">
+                                                    <i class="fas fa-edit"></i> Valider
+                                                </a>
+                                                <a href="${pageContext.request.contextPath}/admin/livres/delete/${livre.id}" class="btn btn-danger btn-sm"
+                                                   onclick="return confirm('Êtes-vous sûr de vouloir supprimer ce livre ?')">
+                                                    <i class="fas fa-trash"></i> Refuser
+                                                </a>
                                             </td>
                                         </tr>
                                     </c:forEach>
@@ -429,8 +434,10 @@
                                             <div class="empty-state">
                                                 <i class="fas fa-book"></i>
                                                 <h3>Aucun livre trouvé</h3>
-                                                <p>Pas de livre disponible pour le moment</p>
-                                                
+                                                <p>Commencez par ajouter un nouveau livre à votre collection</p>
+                                                <a href="${pageContext.request.contextPath}/admin/livres/new" class="btn btn-primary mt-2">
+                                                    <i class="fas fa-plus"></i> Ajouter un livre
+                                                </a>
                                             </div>
                                         </td>
                                     </tr>

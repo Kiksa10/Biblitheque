@@ -1,5 +1,7 @@
 package controller;
 
+import java.sql.Date;
+import java.util.Calendar;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -19,12 +21,16 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import jakarta.servlet.http.HttpSession;
 // import model.Auteur;
 import model.Livre;
+import model.Reservation;
 import model.Adherent;
 import model.Emprunt;
+import model.Exemplaire;
 import service.AdherentService;
 import service.EmpruntService;
+import service.ExemplaireService;
 // import service.AuteurService;
 import service.LivreService;
+import service.ReservationService;
 
 @Controller
 public class LivreController {
@@ -39,8 +45,14 @@ public class LivreController {
     private EmpruntService empruntService;
 
     @Autowired
-    // private AuteurService auteurService;
+    private ExemplaireService exemplaireService;
 
+    @Autowired
+    private ReservationService reservationService;
+
+    @Autowired
+    // private AuteurService auteurService;
+    // -------------redirect---------------// 
     @GetMapping("/adminHome")
     public String redirectToAdminPage() {
         System.out.println("Redirection vers /livres");
@@ -59,6 +71,31 @@ public class LivreController {
         return "redirect:/reserv";
     }
 
+    @GetMapping("/admin/reservations")
+    public String redirectToAdminReservation() {
+        System.out.println("Redirection vers /reservationAdmin");
+        return "redirect:/reservationAdmin";
+    }
+
+
+    //------------- controller ---------------//
+
+    
+    @GetMapping("/reservationAdmin")
+    @Transactional(readOnly = true)
+    public String adminReservationPage(Model model, @RequestParam(value = "error", required = false) Boolean error) {
+        List<Reservation> reservations = reservationService.getReservationsEnAttente();
+        // System.out.println("livres récupérés : " + reservations);
+        model.addAttribute("reservations", reservations);
+
+        if (Boolean.TRUE.equals(error)) {
+            model.addAttribute("errorMessage", "Une erreur s'est produite lors de la recuperation des reservation.");
+        }
+
+        return "adminReservation";
+    }
+
+
     @GetMapping("/adminPage")
     @Transactional(readOnly = true)
     public String adminPage(Model model, @RequestParam(value = "error", required = false) Boolean error) {
@@ -75,21 +112,72 @@ public class LivreController {
 
     @GetMapping("/reserv")
     @Transactional(readOnly = true)
-    public String reservationPage(Model model, @RequestParam(value = "error", required = false) Boolean error) {
+    public String reservationPage(Model model, @RequestParam(value = "error", required = false) Exception error ,@RequestParam(value = "success", required = false) String success) {
         List<Livre> livre = livreService.getAllLivres();
         System.out.println("livres récupérés : " + livre);
         model.addAttribute("livres", livre);
 
-        if (Boolean.TRUE.equals(error)) {
-            model.addAttribute("errorMessage", "Une erreur s'est produite lors de l'ajout du livres.");
+        if (error != null) {
+            model.addAttribute("errorMessage", "Une erreur s'est produite lors de l'ajout du livres. "+ error.getMessage());
+            model.addAttribute("success", success);
         }
 
         return "reservationExemplaire";
     }
 
+    @GetMapping("/res/{id}")
+    @Transactional
+    public String reserverLivre(@PathVariable("id") Long id, 
+                            Model model, 
+                            HttpSession session,
+                            @RequestParam Date dateReservation,
+                            RedirectAttributes redirectAttributes) {
+        
+    // Vérification de la session
+    Adherent adherent = (Adherent) session.getAttribute("adherent");
+    if (adherent == null) {
+        redirectAttributes.addFlashAttribute("error", "Vous devez être connecté pour réserver un livre");
+        return "redirect:/login";
+    }
+
+    // Vérification du livre
+    Livre livre = livreService.getLivreWithExemplaires(id);
+        if (livre.getNbrExemplaire() == null || livre.getNbrExemplaire() <= 0) {
+            redirectAttributes.addFlashAttribute("error", "Plus d'exemplaires disponibles pour ce livre");
+            return "redirect:/reserv";
+        }
+
+    try {
+        // Création de la réservation
+        Reservation reservation = new Reservation();
+        reservation.setAdherent(adherent);
+        reservation.setLivre(livre);
+        reservation.setDateReservation(dateReservation); // Date actuelle
+        
+        // Le statut EN_ATTENTE est déjà défini par défaut dans l'entité Reservation
+        // Mais on peut le spécifier explicitement pour plus de clarté
+        reservation.setStatut(Reservation.StatutReservation.EN_ATTENTE);
+        
+        // Calcul de la date d'expiration (par exemple 7 jours après)
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.DAY_OF_YEAR, 7);
+        reservation.setDateExpiration(calendar.getTime());
+
+        // Sauvegarde de la réservation
+        reservationService.saveReservation(reservation);
+        
+        redirectAttributes.addFlashAttribute("success", "Réservation effectuée avec succès");
+    } catch (Exception e) {
+        redirectAttributes.addFlashAttribute("error", "Erreur lors de la réservation: " + e.getMessage());
+        return "redirect:/reserv";
+    }
+
+    return "redirect:/reserv";
+}
+
 
     @GetMapping("/adherentPage")
-public String adherentPage(Model model, HttpSession session, RedirectAttributes redirectAttributes) {
+    public String adherentPage(Model model, HttpSession session, RedirectAttributes redirectAttributes) {
     try {
         // 1. Vérification de la session
         if (session.getAttribute("adherent") == null) {

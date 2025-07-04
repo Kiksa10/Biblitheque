@@ -31,6 +31,7 @@ public class Reservation {
     private Date dateExpiration;
 
     @Enumerated(EnumType.STRING)
+    @Column(columnDefinition = "ENUM('en attente', 'honorée', 'annulée', 'expirée')")
     private StatutReservation statut = StatutReservation.EN_ATTENTE;
 
     public Reservation() {}
@@ -40,9 +41,42 @@ public class Reservation {
         this.livre = livre;
     }
 
+    public Reservation(Adherent adherent, Livre livre, Date dateReservation) {
+        this.adherent = adherent;
+        this.livre = livre;
+        this.dateReservation = dateReservation;
+    }
+
     // Enum pour les statuts de réservation
     public enum StatutReservation {
-        EN_ATTENTE, HONOREE, ANNULEE, EXPIREE
+        EN_ATTENTE("EN_ATTENTE"),
+        HONOREE("HONOREE"), 
+        ANNULEE("ANNULEE"),
+        EXPIREE("EXPIREE");
+
+        private final String dbValue;
+
+        StatutReservation(String dbValue) {
+            this.dbValue = dbValue;
+        }
+
+        public String getDbValue() {
+            return dbValue;
+        }
+
+        public static StatutReservation fromDbValue(String dbValue) {
+            for (StatutReservation status : values()) {
+                if (status.dbValue.equalsIgnoreCase(dbValue)) {
+                    return status;
+                }
+            }
+            throw new IllegalArgumentException("Statut inconnu: " + dbValue);
+        }
+
+        @Override
+        public String toString() {
+            return this.dbValue;
+        }
     }
 
     // Getters and Setters

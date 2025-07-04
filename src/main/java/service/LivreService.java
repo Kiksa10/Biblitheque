@@ -2,6 +2,7 @@ package service;
 
 import model.Livre;
 import repository.LivreRepository;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -34,6 +35,11 @@ public class LivreService {
     public List<Livre> searchByTitre(String titre) {
         return livreRepository.findByTitreContainingIgnoreCase(titre);
     }
+
+    public Livre getLivreWithExemplaires(Long id) {
+    return livreRepository.findByIdWithExemplaires(id)
+            .orElseThrow(() -> new EntityNotFoundException("Livre non trouvé"));
+}
 
     // public List<Livre> searchByAuteur(String auteur) {
     //     return livreRepository.findByAuteurContainingIgnoreCase(auteur);

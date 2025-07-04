@@ -36,7 +36,9 @@ public class ReservationService {
     }
 
     public List<Reservation> getReservationsEnAttente() {
-        return reservationRepository.findByStatut(Reservation.StatutReservation.EN_ATTENTE);
+        // Pour les requêtes basées sur le statut
+    List<Reservation> enAttente = reservationRepository.findByStatut(Reservation.StatutReservation.EN_ATTENTE);
+        return enAttente;
     }
 
     public void annulerReservation(Long reservationId) {
