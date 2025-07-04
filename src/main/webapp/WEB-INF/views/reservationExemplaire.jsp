@@ -325,7 +325,7 @@
         <nav class="sidebar-menu">
             <ul>
                 <li>
-                    <a href="${pageContext.request.contextPath}/adherent/dashboard" class="active">
+                    <a href="${pageContext.request.contextPath}/adherentHome" class="active">
                         <i class="fas fa-tachometer-alt"></i> Tableau de bord
                     </a>
                 </li>
@@ -367,7 +367,7 @@
     <div class="main-content">
         <div class="container">
             <header>
-                <h1><i class="fas fa-book-open"></i> Gestion des Livres</h1>
+                <h1><i class="fas fa-book-open"></i>Listes des Livres</h1>
                 
             </header>
 

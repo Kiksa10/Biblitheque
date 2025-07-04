@@ -351,7 +351,7 @@
                     </a>
                 </li>
                 <li>
-                    <a href="${pageContext.request.contextPath}/admin/prets">
+                    <a href="${pageContext.request.contextPath}/admin/pretsEnCours">
                         <i class="fas fa-exchange-alt"></i> Prêts en cours
                     </a>
                 </li>
