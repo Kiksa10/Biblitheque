@@ -331,13 +331,13 @@
                 </li>
                 <li class="has-submenu">
                     <a href="#">
-                        <i class="fas fa-book"></i> Gestion des livres
+                        <i class="fas fa-book"></i> Gestion des prêts
                         <i class="fas fa-chevron-down ml-auto"></i>
                     </a>
                     <ul class="submenu">
-                        <li><a href="${pageContext.request.contextPath}/admin/livres"><i class="fas fa-list"></i> Liste des livres</a></li>
-                        <li><a href="${pageContext.request.contextPath}/admin/livres/new"><i class="fas fa-plus"></i> Ajouter un livre</a></li>
-                        <li><a href="${pageContext.request.contextPath}/admin/exemplaires"><i class="fas fa-copy"></i> Exemplaires</a></li>
+                        <li><a href="${pageContext.request.contextPath}/admin/pretEnCours"><i class="fas fa-list"></i> Liste des prêts</a></li>
+                        <li><a href="${pageContext.request.contextPath}/admin/pret/new"><i class="fas fa-plus"></i> Ajouter un prêts</a></li>
+                        <li><a href="${pageContext.request.contextPath}/admin/rendu"><i class="fas fa-copy"></i> rendre un prêts</a></li>
                     </ul>
                 </li>
                 <li>
@@ -350,11 +350,7 @@
                         <i class="fas fa-calendar-check"></i> Réservations
                     </a>
                 </li>
-                <li>
-                    <a href="${pageContext.request.contextPath}/admin/pretsEnCours">
-                        <i class="fas fa-exchange-alt"></i> Prêts en cours
-                    </a>
-                </li>
+               
                 <li>
                     <a href="${pageContext.request.contextPath}/admin/retards">
                         <i class="fas fa-exclamation-triangle"></i> Retards
@@ -396,8 +392,8 @@
                                 <th>Id</th>
                                 <th>Titre</th>
                                 <th>Adherent</th>
-                                <th>Date reservation demander/th>
-                                <th>Statut</th>
+                                <th>Date reservation demander</th>
+                                <th>Nbr Exemplaires dispo</th>
                                 <th>Actions</th>
                             </tr>
                         </thead>
@@ -414,7 +410,7 @@
                                             <td>${reservation.adherent.username}</td>
                                             <td>${reservation.dateReservation}</td>
                                             <td>
-                                                <span class="badge status-published">Disponible</span>
+                                                <span class="badge status-published">${reservation.livre.nbrExemplaire}</span>
                                             </td>
                                             <td class="actions">
                                                 <a href="${pageContext.request.contextPath}/admin/livres/edit/${livre.id}" class="btn btn-success btn-sm">

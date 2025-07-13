@@ -31,6 +31,7 @@ import service.ExemplaireService;
 // import service.AuteurService;
 import service.LivreService;
 import service.ReservationService;
+import service.AdminService;
 
 @Controller
 public class LivreController {
@@ -51,7 +52,11 @@ public class LivreController {
     private ReservationService reservationService;
 
     @Autowired
+    private AdminService adminService;
+
+    @Autowired
     // private AuteurService auteurService;
+    
     // -------------redirect---------------// 
     @GetMapping("/adminHome")
     public String redirectToAdminPage() {
@@ -59,7 +64,20 @@ public class LivreController {
         return "redirect:/adminPage";
     }
 
-     @GetMapping("/adherentHome")
+    @GetMapping("/admin/dashboard")
+    public String redirectAdminPage() {
+        System.out.println("Redirection vers /livres");
+        return "redirect:/adminPage";
+    }
+
+    @GetMapping("/admin/pretEnCours")
+    public String redirectAdminPagePretEnCours() {
+        System.out.println("Redirection vers /livres");
+        return "redirect:/adminPretEnCours";
+    }
+
+
+    @GetMapping("/adherentHome")
     public String redirectToAdherentPage() {
         System.out.println("Redirection vers /livres");
         return "redirect:/adherentPage";
@@ -225,6 +243,24 @@ public class LivreController {
         return "redirect:/login";
     }
 }
+
+
+     @GetMapping("/adminPretEnCours")
+    public String adminPretEnCours(Model model, RedirectAttributes redirectAttributes) {
+            // // 4. Préparer les données pour le dashboard
+            int nbPrets = adminService.countTotalCurrentEmprunt();
+            int nbRetards = adminService.countTotalOverdueEmprunt();
+            List<Emprunt> prets = adminService.getAllCurrentEmprunt();
+            
+            // // 5. Ajouter les attributs au modèle
+            
+            model.addAttribute("nombrePretsEnCours", nbPrets);
+            model.addAttribute("nombreRetards", nbRetards);
+            model.addAttribute("prets", prets);
+
+            return "adminPretEnCours";
+
+        }
 
 
 

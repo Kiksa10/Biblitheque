@@ -5,7 +5,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tableau de bord | Bibliothèque</title>
+    <title>Espace Adhérent | Bibliothèque</title>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Playfair+Display:wght@400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
@@ -95,15 +95,6 @@
             text-align: center;
         }
 
-        .sidebar-menu .submenu {
-            padding-left: 2.5rem;
-            display: none;
-        }
-
-        .sidebar-menu .has-submenu.active .submenu {
-            display: block;
-        }
-
         /* Main Content Styles */
         .main-content {
             margin-left: var(--sidebar-width);
@@ -156,21 +147,6 @@
             background-color: #2980b9;
             transform: translateY(-2px);
             box-shadow: var(--shadow);
-        }
-
-        .btn-success {
-            background-color: var(--success-color);
-            color: white;
-        }
-
-        .btn-danger {
-            background-color: var(--danger-color);
-            color: white;
-        }
-
-        .btn-sm {
-            padding: 0.5rem 1rem;
-            font-size: 0.8rem;
         }
 
         .card {
@@ -254,14 +230,19 @@
             color: #ddd;
         }
 
-        .status-published {
+        .status-available {
             background-color: #d4edda;
             color: #155724;
         }
 
-        .status-draft {
+        .status-unavailable {
             background-color: #fff3cd;
             color: #856404;
+        }
+
+        .status-late {
+            background-color: #f8d7da;
+            color: #721c24;
         }
 
         @media (max-width: 992px) {
@@ -309,6 +290,45 @@
             padding: 0.5rem;
             cursor: pointer;
         }
+
+        /* Dashboard cards */
+        .dashboard-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .dashboard-card {
+            background: white;
+            border-radius: 8px;
+            padding: 1.5rem;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+        }
+
+        .dashboard-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .dashboard-card h3 {
+            color: var(--text-light);
+            font-size: 1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .dashboard-card .value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+
+        .dashboard-card .icon {
+            font-size: 2.5rem;
+            color: var(--accent-color);
+            margin-bottom: 1rem;
+        }
     </style>
 </head>
 <body>
@@ -320,9 +340,9 @@
     <!-- Sidebar -->
     <div class="sidebar" id="sidebar">
         <div class="sidebar-header">
-            <h3><i class="fas fa-book-open"></i> Bibliothèque</h3>
+            <h3><i class="fas fa-user-circle"></i> Mon Espace</h3>
         </div>
-        <nav class="sidebar-menu">
+         <nav class="sidebar-menu">
             <ul>
                 <li>
                     <a href="${pageContext.request.contextPath}/admin/dashboard" class="active">
@@ -380,61 +400,77 @@
     <div class="main-content">
         <div class="container">
             <header>
-                <h1><i class="fas fa-book-open"></i> Gestion des Livres</h1>
-                <a href="${pageContext.request.contextPath}/admin/livres/new" class="btn btn-primary">
-                    <i class="fas fa-plus"></i> Ajouter un livre
-                </a>
+                <h1><i class="fas fa-tachometer-alt"></i>Tableau de bord Pret en cours</h1>
+                
             </header>
 
+            <!-- Dashboard Cards -->
+            <div class="dashboard-cards">
+                <div class="dashboard-card">
+                    <div class="icon"><i class="fas fa-book-open"></i></div>
+                    <h3>Livres empruntés</h3>
+                    <div class="value">${nombrePretsEnCours}</div>
+                </div>
+                
+                
+                <div class="dashboard-card">
+                    <div class="icon"><i class="fas fa-exclamation-triangle"></i></div>
+                    <h3>Retards</h3>
+                    <div class="value" style="color: var(--danger-color);">${nombreRetards}</div>
+                </div>
+            </div>
+
+            <!-- Section Mes prêts en cours -->
             <div class="card">
+                <div class="card-header">
+                    <h2><i class="fas fa-exchange-alt"></i>prêts en cours</h2>
+                </div>
                 <div class="table-responsive">
                     <table>
                         <thead>
                             <tr>
                                 <th>Titre</th>
-                                <th>Auteur</th>
-                                <th>Date de publication</th>
-                                <th>Genre</th>
+                                <th>Nom adherent</th>
+                                <th>Id exemplaire</th>
+                                <th>Date d'emprunt</th>
+                                <th>Date de retour</th>
                                 <th>Statut</th>
-                                <th>Actions</th>
+                               
                             </tr>
                         </thead>
                         <tbody>
                             <c:choose>
-                                <c:when test="${not empty livres}">
-                                    <c:forEach items="${livres}" var="livre">
+                                <c:when test="${not empty prets}">
+                                    <c:forEach items="${prets}" var="pret">
                                         <tr>
                                             <td>
-                                                <strong>${livre.titre}</strong><br>
-                                                <span class="text-muted">ISBN: ${livre.isbn}</span>
+                                                <strong>${pret.exemplaire.livre.titre}</strong><br>
+                                                <span class="text-muted">${pret.exemplaire.livre.auteur}</span>
                                             </td>
-                                            <td>${livre.auteur}</td>
-                                            <td>${livre.anneePublication}</td>
-                                            <td>${livre.genre}</td>
+                                            <td>${pret.adherent.nom} ${pret.adherent.prenom}</td>
+                                            <td>${pret.exemplaire.id}</td>
+                                            <td>${pret.dateEmprunt}</td>
+                                            <td>${pret.dateRetourPrevue}</td>
                                             <td>
-                                                <span class="badge status-published">Disponible</span>
+                                                <c:if test="${pret.dateRetourEffectif == null}">
+                                                   en cours
+                                                </c:if>
+
+                                               
                                             </td>
-                                            <td class="actions">
-                                                <a href="${pageContext.request.contextPath}/admin/livres/edit/${livre.id}" class="btn btn-success btn-sm">
-                                                    <i class="fas fa-edit"></i> Modifier
-                                                </a>
-                                                <a href="${pageContext.request.contextPath}/admin/livres/delete/${livre.id}" class="btn btn-danger btn-sm"
-                                                   onclick="return confirm('Êtes-vous sûr de vouloir supprimer ce livre ?')">
-                                                    <i class="fas fa-trash"></i> Supprimer
-                                                </a>
-                                            </td>
+                                           
                                         </tr>
                                     </c:forEach>
                                 </c:when>
                                 <c:otherwise>
                                     <tr>
-                                        <td colspan="6">
+                                        <td colspan="5">
                                             <div class="empty-state">
-                                                <i class="fas fa-book"></i>
-                                                <h3>Aucun livre trouvé</h3>
-                                                <p>Commencez par ajouter un nouveau livre à votre collection</p>
-                                                <a href="${pageContext.request.contextPath}/admin/livres/new" class="btn btn-primary mt-2">
-                                                    <i class="fas fa-plus"></i> Ajouter un livre
+                                                <i class="fas fa-book-open"></i>
+                                                <h3>Aucun prêt en cours</h3>
+                                                <p>Consultez notre catalogue pour trouver votre prochaine lecture</p>
+                                                <a href="${pageContext.request.contextPath}/adherent/exemplaires" class="btn btn-primary mt-2">
+                                                    <i class="fas fa-search"></i> Chercher un livre
                                                 </a>
                                             </div>
                                         </td>
@@ -451,16 +487,6 @@
     <script>
         // Script pour améliorer l'interactivité
         document.addEventListener('DOMContentLoaded', function() {
-            // Gestion des sous-menus
-            const hasSubmenu = document.querySelectorAll('.has-submenu');
-            hasSubmenu.forEach(item => {
-                item.addEventListener('click', function(e) {
-                    if (e.target.tagName === 'A') {
-                        this.classList.toggle('active');
-                    }
-                });
-            });
-
             // Effets hover sur les boutons
             const buttons = document.querySelectorAll('.btn');
             buttons.forEach(button => {
@@ -471,16 +497,6 @@
                 button.addEventListener('mouseleave', function() {
                     this.style.transform = 'translateY(0)';
                     this.style.boxShadow = 'var(--shadow)';
-                });
-            });
-
-            // Confirmation avant suppression
-            const deleteButtons = document.querySelectorAll('.btn-danger');
-            deleteButtons.forEach(button => {
-                button.addEventListener('click', function(e) {
-                    if (!confirm('Êtes-vous certain de vouloir supprimer ce livre ? Cette action est irréversible.')) {
-                        e.preventDefault();
-                    }
                 });
             });
         });

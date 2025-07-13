@@ -77,5 +77,5 @@ public class Emprunt {
     public Date getDateRetourEffectif() { return dateRetourEffectif; }
     public void setDateRetourEffectif(Date dateRetourEffectif) { this.dateRetourEffectif = dateRetourEffectif; }
     // public StatutEmprunt getStatut() { return statut; }
-    // public void setStatut(StatutEmprunt statut) { this.statut = statut; }
+    // public void setStatut(StatutEmprunt statut) { this.Str = statut; }
 }
