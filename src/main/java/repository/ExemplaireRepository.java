@@ -21,4 +21,7 @@ public interface ExemplaireRepository extends JpaRepository<Exemplaire, Long> {
     // Compter les exemplaires disponibles d'un livre
     @Query("SELECT COUNT(e) FROM Exemplaire e JOIN e.statusHistory s WHERE e.livre.id = :livreId AND s.status.etat = 'DISPONIBLE'")
     long countExemplairesDisponiblesByLivreId(@Param("livreId") Long livreId);
+
+    @Query("SELECT e FROM Exemplaire e JOIN e.statusHistory s WHERE e.livre.id = :livreId AND s.status.etat = 'DISPONIBLE'")
+    List<Exemplaire> getExemplaireDispo(@Param("livreId") Long livreId);
 }

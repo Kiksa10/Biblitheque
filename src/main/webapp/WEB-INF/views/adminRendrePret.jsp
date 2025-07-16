@@ -5,7 +5,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tableau de bord | Bibliothèque</title>
+    <title>Rendre un Prêt | Bibliothèque</title>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Playfair+Display:wght@400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
@@ -168,100 +168,80 @@
             color: white;
         }
 
-        .btn-sm {
-            padding: 0.5rem 1rem;
-            font-size: 0.8rem;
-        }
-
-        .card {
+        /* Styles spécifiques au formulaire */
+        .form-container {
             background-color: white;
             border-radius: 8px;
             box-shadow: var(--shadow);
-            overflow: hidden;
+            padding: 2rem;
             margin-bottom: 2rem;
         }
 
-        .table-responsive {
-            overflow-x: auto;
+        .form-group {
+            margin-bottom: 1.5rem;
         }
 
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-
-        th, td {
-            padding: 1rem 1.5rem;
-            text-align: left;
-        }
-
-        thead {
-            background-color: var(--primary-color);
-            color: white;
-        }
-
-        th {
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
             font-weight: 500;
-            text-transform: uppercase;
-            font-size: 0.8rem;
-            letter-spacing: 0.5px;
         }
 
-        tbody tr {
-            border-bottom: 1px solid #eee;
+        select, input {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-family: inherit;
+            font-size: 1rem;
             transition: var(--transition);
         }
 
-        tbody tr:last-child {
-            border-bottom: none;
+        select:focus, input:focus {
+            outline: none;
+            border-color: var(--accent-color);
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
         }
 
-        tbody tr:hover {
-            background-color: #f5f5f5;
+        .form-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 1rem;
+            margin-top: 2rem;
         }
 
-        .badge {
+        .info-text {
+            font-size: 0.9rem;
+            color: var(--text-light);
+            margin-top: 0.5rem;
+        }
+
+        .small-input {
+            width: 100px !important;
             display: inline-block;
-            padding: 0.25rem 0.5rem;
-            border-radius: 50px;
-            font-size: 0.75rem;
-            font-weight: 500;
-            background-color: var(--light-color);
-            color: var(--text-color);
-            margin-right: 0.5rem;
+            margin-right: 10px;
+        }
+
+        .pret-info {
+            background-color: #f8f9fa;
+            border-radius: 6px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            border-left: 4px solid var(--accent-color);
+        }
+
+        .pret-info h3 {
+            margin-bottom: 1rem;
+            color: var(--primary-color);
+        }
+
+        .pret-info p {
             margin-bottom: 0.5rem;
         }
 
-        .text-muted {
-            color: var(--text-light);
-            font-size: 0.9rem;
-        }
-
-        .actions {
-            display: flex;
-            gap: 0.5rem;
-        }
-
-        .empty-state {
-            text-align: center;
-            padding: 3rem;
-            color: var(--text-light);
-        }
-
-        .empty-state i {
-            font-size: 3rem;
-            margin-bottom: 1rem;
-            color: #ddd;
-        }
-
-        .status-published {
-            background-color: #d4edda;
-            color: #155724;
-        }
-
-        .status-draft {
-            background-color: #fff3cd;
-            color: #856404;
+        .pret-info .label {
+            font-weight: 500;
+            color: var(--secondary-color);
         }
 
         @media (max-width: 992px) {
@@ -284,30 +264,13 @@
             .container {
                 padding: 1rem;
             }
-            
-            th, td {
-                padding: 0.75rem;
-            }
-            
-            .actions {
+            .form-actions {
                 flex-direction: column;
-                gap: 0.25rem;
             }
-        }
-
-        /* Toggle button for mobile */
-        .sidebar-toggle {
-            display: none;
-            position: fixed;
-            top: 1rem;
-            left: 1rem;
-            z-index: 1100;
-            background: var(--primary-color);
-            color: white;
-            border: none;
-            border-radius: 4px;
-            padding: 0.5rem;
-            cursor: pointer;
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
         }
     </style>
 </head>
@@ -325,19 +288,19 @@
         <nav class="sidebar-menu">
             <ul>
                 <li>
-                    <a href="${pageContext.request.contextPath}/admin/dashboard" class="active">
+                    <a href="${pageContext.request.contextPath}/admin/dashboard">
                         <i class="fas fa-tachometer-alt"></i> Tableau de bord
                     </a>
                 </li>
-                <li class="has-submenu">
+                <li class="has-submenu active">
                     <a href="#">
                         <i class="fas fa-book"></i> Gestion des prêts
                         <i class="fas fa-chevron-down ml-auto"></i>
                     </a>
                     <ul class="submenu">
                         <li><a href="${pageContext.request.contextPath}/admin/pretEnCours"><i class="fas fa-list"></i> Liste des prêts</a></li>
-                        <li><a href="${pageContext.request.contextPath}/admin/pret/new"><i class="fas fa-plus"></i> Ajouter un prêts</a></li>
-                        <li><a href="${pageContext.request.contextPath}/admin/rendu"><i class="fas fa-copy"></i> rendre un prêts</a></li>
+                        <li><a href="${pageContext.request.contextPath}/admin/pret/new"><i class="fas fa-plus"></i> Ajouter un prêt</a></li>
+                        <li><a href="${pageContext.request.contextPath}/admin/rendu" class="active"><i class="fas fa-copy"></i> Rendre un prêt</a></li>
                     </ul>
                 </li>
                 <li>
@@ -350,21 +313,14 @@
                         <i class="fas fa-calendar-check"></i> Réservations
                     </a>
                 </li>
-               
                 <li>
                     <a href="${pageContext.request.contextPath}/admin/retards">
                         <i class="fas fa-exclamation-triangle"></i> Retards
-                        <span class="badge" style="background: var(--danger-color); color: white;">3</span>
                     </a>
                 </li>
                 <li>
                     <a href="${pageContext.request.contextPath}/admin/statistiques">
                         <i class="fas fa-chart-bar"></i> Statistiques
-                    </a>
-                </li>
-                <li>
-                    <a href="${pageContext.request.contextPath}/admin/parametres">
-                        <i class="fas fa-cog"></i> Paramètres
                     </a>
                 </li>
                 <li>
@@ -380,75 +336,89 @@
     <div class="main-content">
         <div class="container">
             <header>
-                <h1><i class="fas fa-book-open"></i> Gestion des Reservations</h1>
-                
+                <h1><i class="fas fa-book-return"></i> Rendre un Prêt</h1>
+                <a href="${pageContext.request.contextPath}/admin/pretEnCours" class="btn btn-primary">
+                    <i class="fas fa-arrow-left"></i> Retour à la liste
+                </a>
+                 <c:if test="${error != null}">
+                    <h1>${error}</h1>                            
+                </c:if>
+                <c:if test="${succes != null}">
+                    <h1>${success}</h1>
+                </c:if>
             </header>
 
-            <div class="card">
-                <div class="table-responsive">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Id</th>
-                                <th>Titre</th>
-                                <th>Adherent</th>
-                                <th>Date reservation demander</th>
-                                <th>Nbr Exemplaires dispo</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <c:choose>
-                                <c:when test="${not empty reservations}">
-                                    <c:forEach items="${reservations}" var="reservation">
-                                        <tr>
-                                            <td>
-                                                <strong>${reservation.id}</strong><br>
-                                                
-                                            </td>
-                                            <td>${reservation.livre.titre}</td>
-                                            <td>${reservation.adherent.username}</td>
-                                            <td>${reservation.dateReservation}</td>
-                                            <td>
-                                                <span class="badge status-published">${reservation.livre.nbrExemplaire}</span>
-                                            </td>
-                                            <td class="actions">
-                                                <a href="${pageContext.request.contextPath}/admin/livres/edit/${reservation.livre.id}" class="btn btn-success btn-sm">
-                                                    <i class="fas fa-edit"></i> Valider
-                                                </a>
-                                                <a href="${pageContext.request.contextPath}/admin/livres/delete/${reservation.livre.id}" class="btn btn-danger btn-sm"
-                                                   onclick="return confirm('Êtes-vous sûr de vouloir supprimer ce livre ?')">
-                                                    <i class="fas fa-trash"></i> Refuser
-                                                </a>
-                                            </td>
-                                        </tr>
-                                    </c:forEach>
-                                </c:when>
-                                <c:otherwise>
-                                    <tr>
-                                        <td colspan="6">
-                                            <div class="empty-state">
-                                                <i class="fas fa-book"></i>
-                                                <h3>Aucun livre trouvé</h3>
-                                                <p>Commencez par ajouter un nouveau livre à votre collection</p>
-                                                <a href="${pageContext.request.contextPath}/admin/livres/new" class="btn btn-primary mt-2">
-                                                    <i class="fas fa-plus"></i> Ajouter un livre
-                                                </a>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                </c:otherwise>
-                            </c:choose>
-                        </tbody>
-                    </table>
-                </div>
+            <div class="form-container">
+                <form action="${pageContext.request.contextPath}/processReturn" method="POST">
+                    <div class="form-group">
+                        <label for="pretId">Sélectionner un prêt à rendre *</label>
+                        <select name="pretId" id="pretId" required onchange="updatePretInfo()">
+                            <option value="">-- Sélectionner un prêt --</option>
+                            <c:forEach items="${pretsEnCours}" var="pret">
+                                <option value="${pret.id}" 
+                                        data-adherent="${pret.adherent.nom} ${pret.adherent.prenom}"
+                                        data-livre="${pret.exemplaire.livre.titre} (${pret.exemplaire.livre.auteur})"
+                                        data-date-pret="${pret.dateEmprunt}"
+                                        data-date-retour="${pret.dateRetourPrevue}">
+                                        
+                                    ${pret.exemplaire.livre.titre} - ${pret.adherent.nom} (Retour prévu: ${pret.dateRetourPrevue})
+                                    <c:if test="${pret.dateRetourPrevue} < ${currentDate}"> - EN RETARD</c:if>
+                                </option>
+                            </c:forEach>
+                        </select>
+                    </div>
+                    
+                    <div id="pretInfoContainer" class="pret-info" style="display: none;">
+                        <h3>Détails du prêt</h3>
+                        <p><span class="label">Adhérent:</span> <span id="adherentInfo"></span></p>
+                        <p><span class="label">Livre:</span> <span id="livreInfo"></span></p>
+                        <p><span class="label">Date de prêt:</span> <span id="datePretInfo"></span></p>
+                        <p><span class="label">Date de retour prévue:</span> <span id="dateRetourInfo"></span></p>
+                        <p id="retardInfo" style="color: var(--danger-color); font-weight: 500;"></p>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="dateRetourEffectif">Date de retour effectif *</label>
+                        <input type="date" name="dateRetourEffectif" id="dateRetourEffectif" required 
+                               value="${currentDate}">
+                        <p class="info-text">La date ne peut pas être dans le futur</p>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="etatLivre">État du livre *</label>
+                        <select name="etatLivre" id="etatLivre" required>
+                            <option value="">-- Sélectionner l'état --</option>
+                            <option value="BON">Bon état</option>
+                            <option value="ABIME">Abîmé</option>
+                            <option value="PERDU">Perdu</option>
+                            <option value="DETERIORE">Détérioré</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="commentaireRetour">Commentaire sur le retour</label>
+                        <textarea name="commentaireRetour" id="commentaireRetour" rows="3" 
+                               placeholder="Facultatif (dégâts constatés, etc.)" class="form-control"></textarea>
+                    </div>
+                    
+                    <div class="form-actions">
+                        <button type="reset" class="btn btn-danger">
+                            <i class="fas fa-times"></i> Annuler
+                        </button>
+                        <button type="submit" class="btn btn-success">
+                            <i class="fas fa-check-circle"></i> Confirmer le retour
+                        </button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
 
     <script>
-        // Script pour améliorer l'interactivité
         document.addEventListener('DOMContentLoaded', function() {
+            // Initialiser la date de retour à aujourd'hui
+            document.getElementById('dateRetourEffectif').valueAsDate = new Date();
+            
             // Gestion des sous-menus
             const hasSubmenu = document.querySelectorAll('.has-submenu');
             hasSubmenu.forEach(item => {
@@ -458,31 +428,33 @@
                     }
                 });
             });
-
-            // Effets hover sur les boutons
-            const buttons = document.querySelectorAll('.btn');
-            buttons.forEach(button => {
-                button.addEventListener('mouseenter', function() {
-                    this.style.transform = 'translateY(-2px)';
-                    this.style.boxShadow = '0 6px 12px rgba(0, 0, 0, 0.15)';
-                });
-                button.addEventListener('mouseleave', function() {
-                    this.style.transform = 'translateY(0)';
-                    this.style.boxShadow = 'var(--shadow)';
-                });
-            });
-
-            // Confirmation avant suppression
-            const deleteButtons = document.querySelectorAll('.btn-danger');
-            deleteButtons.forEach(button => {
-                button.addEventListener('click', function(e) {
-                    if (!confirm('Êtes-vous certain de vouloir supprimer ce livre ? Cette action est irréversible.')) {
-                        e.preventDefault();
-                    }
-                });
-            });
         });
-
+        
+        // Mettre à jour les informations du prêt sélectionné
+        function updatePretInfo() {
+            const select = document.getElementById('pretId');
+            const selectedOption = select.options[select.selectedIndex];
+            const container = document.getElementById('pretInfoContainer');
+            
+            if (selectedOption.value) {
+                container.style.display = 'block';
+                document.getElementById('adherentInfo').textContent = selectedOption.getAttribute('data-adherent');
+                document.getElementById('livreInfo').textContent = selectedOption.getAttribute('data-livre');
+                document.getElementById('datePretInfo').textContent = selectedOption.getAttribute('data-date-pret');
+                document.getElementById('dateRetourInfo').textContent = selectedOption.getAttribute('data-date-retour');
+                
+                const retardInfo = document.getElementById('retardInfo');
+                if (selectedOption.getAttribute('data-retard') === 'true') {
+                    retardInfo.textContent = '⚠ Ce prêt est en retard';
+                    retardInfo.style.display = 'block';
+                } else {
+                    retardInfo.style.display = 'none';
+                }
+            } else {
+                container.style.display = 'none';
+            }
+        }
+        
         // Fonction pour toggle la sidebar en mobile
         function toggleSidebar() {
             const sidebar = document.getElementById('sidebar');

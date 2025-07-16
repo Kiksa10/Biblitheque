@@ -23,7 +23,8 @@ public class Admin {
     private String password;
 
     @Temporal(TemporalType.DATE)
-    private Date dateNaissance;
+    @Column(name = "date_naissance")
+    private Date date_naissance;
 
     private String adresse;
 
@@ -66,8 +67,8 @@ public class Admin {
     public void setUsername(String username) { this.username = username; }
     public String getPassword() { return password; }
     public void setPassword(String password) { this.password = password; }
-    public Date getDateNaissance() { return dateNaissance; }
-    public void setDateNaissance(Date dateNaissance) { this.dateNaissance = dateNaissance; }
+    public Date getdate_naissance() { return date_naissance; }
+    public void setdate_naissance(Date date_naissance) { this.date_naissance = date_naissance; }
     public String getAdresse() { return adresse; }
     public void setAdresse(String adresse) { this.adresse = adresse; }
     public String getTelephone() { return telephone; }

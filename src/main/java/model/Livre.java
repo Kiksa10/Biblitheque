@@ -32,7 +32,7 @@ public class Livre {
     private String resume;
 
     @Column(name = "nbrExemplaire")
-    private Integer nbrExemplaire = 1;
+    private Integer nbrExemplaire;
 
     @Temporal(TemporalType.DATE)
     @DateTimeFormat(pattern = "yyyy-MM-dd")

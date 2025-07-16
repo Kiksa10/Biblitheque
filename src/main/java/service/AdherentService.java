@@ -3,6 +3,7 @@ package service;
 import model.Adherent;
 import model.Emprunt;
 import repository.AdherentRepository;
+import repository.EmpruntRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,9 +21,27 @@ public class AdherentService {
     @Autowired
     private AdherentRepository adherentRepository;
 
+    @Autowired
+    private EmpruntRepository empruntRepository;
+
     public List<Adherent> getAllAdherents() {
         return adherentRepository.findAll();
     }
+
+    public void augmenterNbrPret(Long id){
+        adherentRepository.incrementerNbrPret(id);
+    }
+
+    public void decrementerNbrPret(Long id){
+        adherentRepository.decrementerNbrPret(id);
+    }
+
+
+    // public boolean aDesRetards(Long adherentId) {
+    //     return empruntRepository.existsByAdherentIdAndStatutEnRetard(adherentId);
+        
+      
+    // }
 
     public void saveAdherent(Adherent adherent) {
         adherentRepository.save(adherent);

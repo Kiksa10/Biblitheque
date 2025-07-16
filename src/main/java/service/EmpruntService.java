@@ -5,7 +5,7 @@ import repository.EmpruntRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -20,6 +20,10 @@ public class EmpruntService {
 
     public void saveEmprunt(Emprunt emprunt) {
         empruntRepository.save(emprunt);
+    }
+
+    public void updateEmprunt(Long idAdherent , Long idLivre, Date dateRetourEffectif) {
+        empruntRepository.updateEmprunt(idAdherent , idLivre , dateRetourEffectif);
     }
 
     public Emprunt getEmpruntById(Long id) {

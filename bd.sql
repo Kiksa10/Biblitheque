@@ -56,14 +56,18 @@ CREATE TABLE Adherent (
     email VARCHAR(255) UNIQUE,
     date_inscription DATE DEFAULT CURRENT_DATE,
     categorie ENUM('enfant', 'adulte', 'senior', 'etudiant', 'professionnel') NOT NULL,
-    cotisation DECIMAL(10,2) DEFAULT 0,
-    penalite DECIMAL(10,2) DEFAULT 0,
-    actif BOOLEAN DEFAULT TRUE
+    cotisation DECIMAL(10,2) DEFAULT 0.00,
+    penalite DECIMAL(10,2) DEFAULT 0.00,
+    actif BOOLEAN DEFAULT TRUE,
+    username VARCHAR(50) NOT NULL UNIQUE,
+    password VARCHAR(100) NOT NULL,
+    numero_adherent VARCHAR(20) UNIQUE,
+    max_prets INT DEFAULT 5,
+    prets_en_cours INT DEFAULT 0,
+    date_dernier_pret DATE
 );
 
-ALTER TABLE Adherent 
-ADD COLUMN username VARCHAR(50) UNIQUE,
-ADD COLUMN password VARCHAR(255);
+
 
 -- Table Emprunt
 CREATE TABLE Emprunt (
@@ -73,7 +77,7 @@ CREATE TABLE Emprunt (
     date_emprunt DATETIME DEFAULT CURRENT_TIMESTAMP,
     date_retour_prevue DATETIME,
     date_retour_effectif DATETIME,
-    statut ENUM('en cours', 'retourné', 'en retard', 'perdu') DEFAULT 'en cours',
+    statut VARCHAR(20) DEFAULT 'en cours',
     FOREIGN KEY (id_adherent) REFERENCES Adherent(id) ON DELETE CASCADE,
     FOREIGN KEY (id_exemplaire) REFERENCES Exemplaire(id) ON DELETE CASCADE
 );
@@ -124,6 +128,40 @@ CREATE TABLE admin (
     actif BOOLEAN DEFAULT TRUE,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+
+
+CREATE TABLE ABONNEMENTS (
+    ID_ABONNEMENT INT PRIMARY KEY,
+    ADHERENT VARCHAR(100) NOT NULL,
+    DATE_DEBUT DATE NOT NULL,
+    DATE_FIN DATE NOT NULL,
+    VALIDITE_ABONNEMENT BOOLEAN
+);
+
+CREATE TABLE retour_pret (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    pret_id INT NOT NULL,
+    date_retour_effectif DATE NOT NULL,
+    etat_livre ENUM('BON', 'ABIME', 'DETERIORE', 'PERDU') NOT NULL,
+    commentaire TEXT,
+    amende DECIMAL(10,2) DEFAULT 0.00,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (pret_id) REFERENCES pret(id) ON DELETE CASCADE
+);
+
+-- Optionnel : Table pour suivre les amendes si besoin d'un système plus complexe
+CREATE TABLE amende (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    retour_pret_id INT NOT NULL,
+    montant DECIMAL(10,2) NOT NULL,
+    raison VARCHAR(255) NOT NULL,
+    reglee BOOLEAN DEFAULT FALSE,
+    date_reglement DATE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (retour_pret_id) REFERENCES retour_pret(id) ON DELETE CASCADE
 );
 
 -- Création d'un index sur le username pour des recherches plus rapides

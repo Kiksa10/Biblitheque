@@ -19,6 +19,15 @@ public class ExemplaireService {
         return exemplaireRepository.findAll();
     }
 
+    // public Exemplaire getExemplaireDispo(Long id) {
+    //     return exemplaireRepository.getExemplaireDispo(id);
+    // }
+
+    public Exemplaire getOneExemplaireDispo(Long livreId) {
+    List<Exemplaire> exemplaires = exemplaireRepository.getExemplaireDispo(livreId);
+    return exemplaires.isEmpty() ? null : exemplaires.get(0);
+    }
+
     public void saveExemplaire(Exemplaire exemplaire) {
         exemplaireRepository.save(exemplaire);
     }

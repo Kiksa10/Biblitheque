@@ -452,9 +452,9 @@
                                                
                                             </td>
                                             <td class="actions">
-                                                 <c:if test="${pret.dateRetourPrevue > CURRENT_DATE}">
+                                                 <c:if test="${pret.dateRetourEffectif == null}">
                                                    <a href="${pageContext.request.contextPath}/adherent/prolonger/${pret.id}" class="btn btn-primary btn-sm">
-                                                        <i class="fas fa-calendar-plus"></i> Prolonger
+                                                        <i class="fas fa-calendar-plus"></i> Prolonger (5jrs)
                                                     </a>
                                                 </c:if>
                                                     

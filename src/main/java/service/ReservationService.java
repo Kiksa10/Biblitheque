@@ -19,6 +19,10 @@ public class ReservationService {
         return reservationRepository.findAll();
     }
 
+    public void validerReservation(Long id){
+        reservationRepository.validerReservation(id);
+    }
+
     public void saveReservation(Reservation reservation) {
         reservationRepository.save(reservation);
     }

@@ -19,6 +19,14 @@ public class LivreService {
     public List<Livre> getAllLivres() {
         return livreRepository.findAll();
     }
+    
+    public void enleverUnExemplaire(Long id) {
+         livreRepository.decrementerExemplaire(id);
+    }
+
+    public void ajouterNbrExemplaire(Long id) {
+         livreRepository.incrementerExemplaire(id);
+    }
 
     public void saveLivre(Livre livre) {
         livreRepository.save(livre);

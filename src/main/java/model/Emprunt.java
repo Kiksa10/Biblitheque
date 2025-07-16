@@ -35,8 +35,9 @@ public class Emprunt {
     @Column(name = "date_retour_effectif")
     private Date dateRetourEffectif;
 
-    // @Enumerated(EnumType.STRING)
-    // private StatutEmprunt statut = StatutEmprunt.EN_COURS;
+  
+    @Column(name = "statut")
+    private String statut = "en cours";
 
     public Emprunt() {}
 
@@ -48,7 +49,7 @@ public class Emprunt {
     // Enum pour les statuts d'emprunt
    public enum StatutEmprunt {
     EN_COURS("en cours"),
-    RETOURNE("retourné"),
+    RETOURNE("retourne"),
     EN_RETARD("en retard"), 
     PERDU("perdu");  // Ajoutez cette valeur
     
@@ -76,6 +77,6 @@ public class Emprunt {
     public void setDateRetourPrevue(Date dateRetourPrevue) { this.dateRetourPrevue = dateRetourPrevue; }
     public Date getDateRetourEffectif() { return dateRetourEffectif; }
     public void setDateRetourEffectif(Date dateRetourEffectif) { this.dateRetourEffectif = dateRetourEffectif; }
-    // public StatutEmprunt getStatut() { return statut; }
-    // public void setStatut(StatutEmprunt statut) { this.Str = statut; }
+    public String getStatut() { return statut; }
+    public void setStatut(String statut) { this.statut = statut; }
 }
